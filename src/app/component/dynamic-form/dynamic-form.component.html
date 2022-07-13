@@ -1,4 +1,81 @@
 <div ngClass="body">
-  <button (click)="getData('drug1')">get data</button>
-  <p>data:{{ formData | json }}</p>
+  <div ngClass="header">
+    <h1>Personalized healthcare</h1>
+  </div>
+  <div class="radio group">
+    <h3>Select your Drug</h3>
+    <nz-radio-group
+      nzSize="small"
+      [(ngModel)]="drugType"
+      (ngModelChange)="getData($event)"
+    >
+      <label nz-radio nzValue="drug1">Drug-1 </label>
+      <label nz-radio nzValue="drug2">Drug-2 </label>
+    </nz-radio-group>
+  </div>
+  <nz-divider></nz-divider>
+  <div class="form">
+    <form
+      nzForm
+      [formGroup]="dynamicForm"
+      (ngSubmit)="onSubmit()"
+      nzLayout="vertical"
+    >
+      <div *ngFor="let control of formData">
+        <div *ngIf="control.type != 'dropdown'">
+          <nz-form-item>
+            <nz-form-label
+              nzSpan="12"
+              [nzRequired]="control.isRequired"
+              [nzFor]="control.key"
+              >{{ control.label }}</nz-form-label
+            >
+            <nz-form-control nzSpan="12">
+              <input
+                nz-input
+                [formControlName]="control.key"
+                [type]="control.type"
+                nzSize="small"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="control.type === 'dropdown'">
+          <nz-form-item>
+            <nz-form-label
+              nzSpan="12"
+              [nzRequired]="control.isRequired"
+              [nzFor]="control.key"
+              >{{ control.label }}</nz-form-label
+            >
+            <nz-form-control nzSpan="12">
+              <nz-select
+                [formControlName]="control.key"
+                nzPlaceHolder="Please select"
+                nzAllowClear
+                nzSize="small"
+              >
+                <nz-option
+                  *ngFor="let item of control.items"
+                  [nzLabel]="item.text"
+                  [nzValue]="item.value"
+                  [nzDisabled]="item.disabled"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        type="submit"
+        *ngIf="formData"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
 </div>

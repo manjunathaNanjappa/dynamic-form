@@ -10,13 +10,11 @@ export class FormDataService {
   constructor(private http: HttpClient) {}
 
   async getFormData(drugType: string) {
-    await this.http
-      .get<any>('/assets/json-data/drug1.json')
-      .subscribe((data) => {
-        console.log('data', data);
-        this.formData = data;
+    let path = '/assets/json-data/' + drugType + '.json';
+    return new Promise((resolve) => {
+      this.http.get<any>(path).subscribe((data) => {
+        resolve(data);
       });
-    console.log('this.formData', this.formData);
-    return this.formData;
+    });
   }
 }
